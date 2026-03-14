@@ -1,0 +1,45 @@
+# cc-tmux-menu configuration (TOML format)
+# Copy to config.toml and edit:
+#   cp config.toml.example config.toml
+
+# OpenRouter API key for AI-powered session summaries
+# Get yours at https://openrouter.ai/keys
+# Leave empty to disable AI summaries (falls back to last output line)
+openrouter_api_key = ""
+
+# AI model (cheap & fast recommended for summaries)
+openrouter_model = "google/gemini-2.0-flash-001"
+
+# Working directory for new Claude Code sessions
+work_dir = "~"
+
+# Language for AI summaries (en, zh-TW, ja, ko, ...)
+summary_lang = "en"
+
+# Claude command name
+claude_cmd = "claude"
+
+# Remote SSH host (leave empty to hide from menu)
+remote_host = ""
+remote_user = ""
+
+# Remote connectivity detection (optional)
+# When configured, cc-tmux-menu probes these addresses to determine how to connect:
+#   1. TCP dial gateway_lan:22 succeeds → "direct" — ssh user@remote_host
+#   2. TCP dial gateway_wan:wan_port succeeds → "tunnel" — ssh -p wan_port user@gateway_wan
+#   3. Neither reachable → "offline" — connection blocked
+#
+# Typical setup: a router/gateway (e.g. RouterOS CHR) sits between networks and
+# uses DNAT to port-forward WAN_IP:PORT → LAN_HOST:22.
+#
+# Example: gateway at LAN 10.0.0.1 / WAN 203.0.113.1, DNAT 203.0.113.1:2022 → 10.0.0.50:22
+#   remote_host = "10.0.0.50"
+#   remote_gateway_lan = "10.0.0.1"
+#   remote_gateway_wan = "203.0.113.1"
+#   remote_gateway_wan_port = 2022
+remote_gateway_lan = ""
+remote_gateway_wan = ""
+remote_gateway_wan_port = 0
+
+# Preview cache TTL in seconds (default: 1800 = 30 min)
+preview_cache_ttl = 1800
