@@ -217,7 +217,7 @@ Line 1: Brief summary of what this session is doing (max 30 chars, in %s)
 Line 2: A descriptive session name for tmux (in %s, max 20 chars, no spaces — use CamelCase or hyphens)
 
 The session name should follow "Action+Target" pattern. Good examples:
-  JMF報價修正, Github產生週報, Poller資料庫除錯, RIC報價討論, 推薦信撰寫, Bloomberg爬蟲備份, KB索引重建
+  API-Refactor, CI-Pipeline-Fix, DB-Migration, Auth-Debug, Docs-Update, Test-Coverage, Deploy-Staging
 Bad examples (too vague):
   GitHub, Claude, 更新, 程式碼, 查看
 

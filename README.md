@@ -14,7 +14,7 @@
 
 - **Session menu** — navigate with arrow keys / jk, enter to attach, q to quit
 - **AI preview** — each session gets a one-line summary of what it's working on (via [OpenRouter](https://openrouter.ai))
-- **AI rename** — suggested session names based on content (e.g. `JMF報價修正`, `KB索引重建`)
+- **AI rename** — suggested session names based on content (e.g. `API-Refactor`, `DB-Debug`)
 - **Session management** — attach, rename, kill from a single menu
 - **Random naming** — new sessions get `adjective-noun` names (e.g. `swift-fox`, `calm-reef`)
 - **Remote SSH** — optional SSH shortcut with auto-connectivity detection (direct / DNAT tunnel / offline)
