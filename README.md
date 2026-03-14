@@ -7,8 +7,7 @@
 [![Release](https://img.shields.io/github/v/release/mousems/cc-tmux-menu)](https://github.com/mousems/cc-tmux-menu/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-<!-- TODO: replace with actual demo GIF -->
-<!-- ![demo](demo.gif) -->
+![demo](demo.gif)
 
 ## Features
 
