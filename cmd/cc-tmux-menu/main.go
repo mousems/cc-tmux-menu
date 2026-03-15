@@ -13,14 +13,34 @@ import (
 var version = "dev"
 
 func main() {
-	if len(os.Args) > 1 && (os.Args[1] == "--version" || os.Args[1] == "-v") {
-		fmt.Println("cc-tmux-menu " + version)
-		os.Exit(0)
-	}
-
-	if len(os.Args) > 1 && os.Args[1] == "--setup" {
-		config.RunSetup()
-		os.Exit(0)
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "--version", "-v":
+			fmt.Println("cc-tmux-menu " + version)
+			os.Exit(0)
+		case "--setup":
+			config.RunSetup()
+			os.Exit(0)
+		case "--help", "-h":
+			fmt.Println("cc-tmux-menu — interactive tmux session manager for Claude Code")
+			fmt.Println()
+			fmt.Println("Usage: cc-tmux-menu [flags]")
+			fmt.Println()
+			fmt.Println("Flags:")
+			fmt.Println("  --help, -h       Show this help")
+			fmt.Println("  --version, -v    Show version")
+			fmt.Println("  --setup          Run interactive configuration wizard")
+			fmt.Println()
+			fmt.Println("Navigation:")
+			fmt.Println("  ↑/↓, j/k         Move cursor")
+			fmt.Println("  Enter             Select / confirm")
+			fmt.Println("  ←/h, Esc          Back (in sub-menu)")
+			fmt.Println("  q, Ctrl+C         Quit")
+			fmt.Println()
+			fmt.Println("Config: ~/.config/cc-tmux-menu/config.toml")
+			fmt.Println("Repo:   https://github.com/mousems/cc-tmux-menu")
+			os.Exit(0)
+		}
 	}
 
 	// If already inside tmux, exit silently
