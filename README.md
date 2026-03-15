@@ -57,19 +57,40 @@ make install   # builds and copies to ~/.local/bin/
 
 ## Quick start
 
+Just run it — first launch triggers a setup wizard:
+
 ```bash
-# 1. Run it
 cc-tmux-menu
-
-# 2. (Optional) Add OpenRouter API key for AI previews
-mkdir -p ~/.config/cc-tmux-menu
-cat > ~/.config/cc-tmux-menu/config.toml << 'EOF'
-openrouter_api_key = "sk-or-v1-..."
-EOF
-
-# 3. (Optional) Auto-launch on new terminal
-echo '[[ -z "$TMUX" && -x "$(command -v cc-tmux-menu)" ]] && cc-tmux-menu' >> ~/.zshrc
 ```
+
+```
+Welcome to cc-tmux-menu!
+No config file found. Set up now? [Y/n] y
+
+OpenRouter API Key (for AI session summaries, optional)
+  Get one at: https://openrouter.ai/keys
+  Press Enter to skip:
+
+Work directory (for new Claude Code sessions)
+  Press Enter for home directory: ~/projects
+
+Summary language (en, zh-TW, ja, ko, ...)
+  Press Enter for en:
+
+✓ Config saved to ~/.config/cc-tmux-menu/config.toml
+
+Auto-launch on new terminal? (starts cc-tmux-menu when you open a shell)
+  [Y/n] y
+  ✓ Added to ~/.zshrc
+```
+
+The wizard:
+1. **API key** — optional, skip to use without AI features
+2. **Work directory** — where new Claude Code sessions start
+3. **Language** — for AI summaries
+4. **Shell integration** — auto-detects zsh/bash/fish and adds launch snippet
+
+You can re-run the wizard anytime with `cc-tmux-menu --setup`.
 
 ## Usage
 
