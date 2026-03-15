@@ -9,11 +9,12 @@ import (
 )
 
 const (
-	bold  = "\033[1m"
-	cyan  = "\033[36m"
-	green = "\033[32m"
-	dim   = "\033[2m"
-	reset = "\033[0m"
+	bold   = "\033[1m"
+	cyan   = "\033[36m"
+	green  = "\033[32m"
+	yellow = "\033[33m"
+	dim    = "\033[2m"
+	reset  = "\033[0m"
 )
 
 // RunSetup runs an interactive first-time configuration wizard.
@@ -85,7 +86,72 @@ func RunSetup() bool {
 	}
 
 	fmt.Printf("%s%s✓ Config saved to %s%s%s\n\n", green, bold, cyan, configPath, reset)
+
+	// Shell integration
+	fmt.Printf("%sAuto-launch on new terminal?%s %s(starts cc-tmux-menu when you open a shell)%s\n", bold, reset, dim, reset)
+	fmt.Printf("  [Y/n] ")
+	shellAnswer, _ := reader.ReadString('\n')
+	shellAnswer = strings.TrimSpace(strings.ToLower(shellAnswer))
+
+	if shellAnswer != "n" && shellAnswer != "no" {
+		snippet := "\n# cc-tmux-menu: auto-launch (only outside tmux, interactive shell)\nif [[ -z \"$TMUX\" && $- == *i* ]] && command -v cc-tmux-menu &>/dev/null; then\n  cc-tmux-menu\nfi\n"
+
+		shellRC := detectShellRC()
+		if shellRC != "" {
+			// Check if already added
+			existing, _ := os.ReadFile(shellRC)
+			if strings.Contains(string(existing), "cc-tmux-menu") {
+				fmt.Printf("  %s!%s Already in %s%s%s\n", yellow, reset, cyan, shellRC, reset)
+			} else {
+				f, err := os.OpenFile(shellRC, os.O_APPEND|os.O_WRONLY, 0644)
+				if err == nil {
+					f.WriteString(snippet)
+					f.Close()
+					fmt.Printf("  %s%s✓ Added to %s%s%s\n", green, bold, cyan, shellRC, reset)
+				} else {
+					fmt.Printf("  Could not write to %s: %v\n", shellRC, err)
+					printManualSnippet()
+				}
+			}
+		} else {
+			fmt.Println("  Shell profile not found. Add manually:")
+			printManualSnippet()
+		}
+	}
+
+	fmt.Println()
 	return true
+}
+
+func printManualSnippet() {
+	fmt.Printf("\n  %s# Add to your shell profile (.zshrc, .bashrc, etc.)%s\n", dim, reset)
+	fmt.Printf("  %sif [[ -z \"$TMUX\" && $- == *i* ]] && command -v cc-tmux-menu &>/dev/null; then%s\n", cyan, reset)
+	fmt.Printf("  %s  cc-tmux-menu%s\n", cyan, reset)
+	fmt.Printf("  %sfi%s\n", cyan, reset)
+}
+
+func detectShellRC() string {
+	home, _ := os.UserHomeDir()
+
+	// Check current shell
+	shell := os.Getenv("SHELL")
+	switch {
+	case strings.HasSuffix(shell, "/zsh"):
+		return filepath.Join(home, ".zshrc")
+	case strings.HasSuffix(shell, "/bash"):
+		return filepath.Join(home, ".bashrc")
+	case strings.HasSuffix(shell, "/fish"):
+		return filepath.Join(home, ".config", "fish", "config.fish")
+	}
+
+	// Fallback: check which files exist
+	for _, rc := range []string{".zshrc", ".bashrc"} {
+		path := filepath.Join(home, rc)
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
+	}
+	return ""
 }
 
 // DefaultConfigDir returns the default config directory path.
