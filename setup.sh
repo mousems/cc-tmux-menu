@@ -160,8 +160,10 @@ if [[ "$add_shell" == "y" || "$add_shell" == "Y" ]]; then
     if ! grep -q 'cc-tmux-menu' "$shell_rc" 2>/dev/null; then
       cat >> "$shell_rc" << 'SHELL_RC'
 
-# cc-tmux-menu: interactive tmux session manager
-[[ -z "$TMUX" && -x "$HOME/.local/bin/cc-tmux-menu" ]] && "$HOME/.local/bin/cc-tmux-menu"
+# cc-tmux-menu: auto-launch (only outside tmux, interactive shell)
+if [[ -z "$TMUX" && $- == *i* ]] && command -v cc-tmux-menu &>/dev/null; then
+  cc-tmux-menu
+fi
 SHELL_RC
       echo -e "  ${GREEN}✓${NC} Added to ${CYAN}${shell_rc}${NC}"
     else
@@ -169,7 +171,9 @@ SHELL_RC
     fi
   else
     echo -e "  ${YELLOW}!${NC} Shell profile not found. Add manually:"
-    echo -e '    [[ -z "$TMUX" && -x "$HOME/.local/bin/cc-tmux-menu" ]] && "$HOME/.local/bin/cc-tmux-menu"'
+    echo -e '    if [[ -z "$TMUX" && $- == *i* ]] && command -v cc-tmux-menu &>/dev/null; then'
+    echo -e '      cc-tmux-menu'
+    echo -e '    fi'
   fi
 fi
 
