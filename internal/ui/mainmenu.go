@@ -72,6 +72,9 @@ type Model struct {
 	textInput    textinput.Model
 	renameTarget string
 
+	// After refresh, move cursor to this session name (then clear it).
+	focusAfterRefresh string
+
 	quitting bool
 }
 
@@ -143,6 +146,18 @@ func (m Model) updateMainMenu(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		m.scrollOff = 0
+
+		// Restore cursor to a specific session (e.g. after rename).
+		if m.focusAfterRefresh != "" {
+			for i, s := range sessions {
+				if s.Name == m.focusAfterRefresh {
+					m.cursor = m.fixedTop + i
+					break
+				}
+			}
+			m.focusAfterRefresh = ""
+			m.adjustScroll()
+		}
 
 		var cmds []tea.Cmd
 		if m.cfg.RemoteHost != "" {

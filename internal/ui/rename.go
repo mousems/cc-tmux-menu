@@ -19,6 +19,7 @@ func (m Model) updateRename(msg tea.Msg) (tea.Model, tea.Cmd) {
 			newName := strings.TrimSpace(m.textInput.Value())
 			if newName != "" {
 				tmux.RenameSession(m.renameTarget, newName)
+				m.focusAfterRefresh = newName
 			}
 			m.state = stateMainMenu
 			return m, func() tea.Msg { return refreshMsg{} }
